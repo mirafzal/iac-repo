@@ -44,3 +44,5 @@ resource "digitalocean_loadbalancer" "app-server-lb" {
     d.id if d.region == "ams3" && d.vpc_uuid == digitalocean_vpc.app-server-vpc.id
   ]
 }
+
+
