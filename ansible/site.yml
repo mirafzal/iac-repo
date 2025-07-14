@@ -1,0 +1,5 @@
+- name: Deploy Nginx site for mirafzal.uz
+  hosts: my-servers
+  become: yes
+  roles:
+    - nginx_site

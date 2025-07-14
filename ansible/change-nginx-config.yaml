@@ -1,0 +1,17 @@
+- name: Configure Nginx with custom config
+  hosts: my-servers
+  become: yes
+
+  tasks:
+    - name: Upload nginx.conf
+      copy:
+        src: ./files/nginx.conf
+        dest: /etc/nginx/nginx.conf
+        backup: yes
+      notify: reload nginx
+
+  handlers:
+    - name: reload nginx
+      service:
+        name: nginx
+        state: reloaded

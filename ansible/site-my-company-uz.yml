@@ -1,0 +1,8 @@
+- name: Deploy Nginx site for mycompany.uz
+  hosts: my-company-servers
+  become: yes
+  vars:
+    domain_name: mycompany.uz
+    web_root: /var/www/mycompany.uz
+  roles:
+    - nginx_site

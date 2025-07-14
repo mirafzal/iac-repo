@@ -1,0 +1,35 @@
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Ensure web root exists
+  file:
+    path: "{{ web_root }}"
+    state: directory
+    mode: '0755'
+
+- name: Add index.html
+  copy:
+    content: "<h1>Welcome to {{ domain_name }}</h1>"
+    dest: "{{ web_root }}/index.html"
+
+- name: Configure Nginx site
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/{{ domain_name }}
+  notify: Reload Nginx
+
+- name: Enable site
+  file:
+    src: /etc/nginx/sites-available/{{ domain_name }}
+    dest: /etc/nginx/sites-enabled/{{ domain_name }}
+    state: link
+    force: yes
+
+- name: Remove default site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+    force: yes

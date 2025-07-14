@@ -1,0 +1,39 @@
+- name: Configure Nginx for mirafzal.uz
+  hosts: my-servers
+  become: yes
+
+  vars:
+    domain_name: mirafzal.uz
+    web_root: /var/www/mirafzal.uz
+
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Ensure web root exists
+      file:
+        path: "{{ web_root }}"
+        state: directory
+
+
+    - name: Copy Nginx config template
+      template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/sites-available/{{ domain_name }}
+      notify: Reload Nginx
+
+    - name: Enable site
+      file:
+        src: /etc/nginx/sites-available/{{ domain_name }}
+        dest: /etc/nginx/sites-enabled/{{ domain_name }}
+        state: link
+        force: yes
+
+  handlers:
+    - name: Reload Nginx
+      service:
+        name: nginx
+        state: reloaded
