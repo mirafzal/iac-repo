@@ -1,0 +1,9 @@
+- name: Install and configure Nginx using Galaxy role
+  hosts: my-servers
+  become: yes
+
+  vars:
+    
+
+  roles:
+    - geerlingguy.nginx
